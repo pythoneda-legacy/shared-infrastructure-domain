@@ -11,7 +11,7 @@
       inputs.flake-utils.follows = "flake-utils";
     };
     pythoneda = {
-      url = "github:pythoneda/base/0.0.1a6";
+      url = "github:pythoneda/base/0.0.1a7";
       inputs.nixos.follows = "nixos";
       inputs.flake-utils.follows = "flake-utils";
       inputs.poetry2nix.follows = "poetry2nix";
@@ -27,13 +27,14 @@
         description =
           "Common classes for infrastructure layers of PythonEDA projects";
         license = pkgs.lib.licenses.gpl3;
+        homepage = "https://github.com/pythoneda-infrastructure/base";
         maintainers = with pkgs.lib.maintainers; [ ];
       in rec {
         packages = {
           pythoneda-infrastructure-base =
             pythonPackages.buildPythonPackage rec {
               pname = "pythoneda-infrastructure-base";
-              version = "0.0.1a4";
+              version = "0.0.1a5";
               projectDir = ./.;
               src = ./.;
               format = "pyproject";

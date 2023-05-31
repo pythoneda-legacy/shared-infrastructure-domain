@@ -69,17 +69,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1685370987,
-        "narHash": "sha256-N8VF0yTdVimxLgIR9y8j1XleuIJxtBNflIPGBc6AyDw=",
-        "owner": "rydnr",
-        "repo": "pythoneda",
-        "rev": "c82d4288068473673e7cb85a4ae19cb40b3d9758",
+        "lastModified": 1685546820,
+        "narHash": "sha256-l2vabcrpvFAApLXmgoe2AA4qmB9bg7eWcWuY2x7ignY=",
+        "owner": "pythoneda",
+        "repo": "base",
+        "rev": "7e6a957fcffea9ad2505325fa674825c29182106",
         "type": "github"
       },
       "original": {
-        "owner": "rydnr",
-        "ref": "0.0.1a5",
-        "repo": "pythoneda",
+        "owner": "pythoneda",
+        "ref": "0.0.1a7",
+        "repo": "base",
         "type": "github"
       }
     },
