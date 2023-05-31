@@ -11,7 +11,7 @@
       inputs.flake-utils.follows = "flake-utils";
     };
     pythoneda = {
-      url = "github:rydnr/pythoneda/0.0.1a6";
+      url = "github:pythoneda/base/0.0.1a6";
       inputs.nixos.follows = "nixos";
       inputs.flake-utils.follows = "flake-utils";
       inputs.poetry2nix.follows = "poetry2nix";
@@ -33,7 +33,7 @@
           pythoneda-infrastructure-base =
             pythonPackages.buildPythonPackage rec {
               pname = "pythoneda-infrastructure-base";
-              version = "0.0.1a3";
+              version = "0.0.1a4";
               projectDir = ./.;
               src = ./.;
               format = "pyproject";
@@ -53,7 +53,7 @@
                 inherit description license homepage maintainers;
               };
             };
-          default = packages.pythoneda-infrastructure-layer;
+          default = packages.pythoneda-infrastructure-base;
           meta = with lib; {
             inherit description license homepage maintainers;
           };
