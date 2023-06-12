@@ -1,8 +1,34 @@
-# log_config.py
+"""
+pythonedainfrastructure/_log_config.py
+
+This file configures the logging for PythonEDA-Application base.
+
+Copyright (C) 2023-today rydnr's PythonEDA-Application/base
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
 import logging
 import sys
 
-def next_higher_level(level):
+def next_higher_level(level: int):
+    """
+    Retrieves the level next to the given one.
+    :param level: The level.
+    :type level: int
+    :return: The next level.
+    :rtype: int
+    """
     levels = [logging.CRITICAL, logging.ERROR, logging.WARNING, logging.INFO, logging.DEBUG]
     for i, current_level in enumerate(levels):
         if level == current_level:
@@ -10,6 +36,15 @@ def next_higher_level(level):
     return level
 
 def configure_logging(verbose: bool, trace: bool, quiet: bool):
+    """
+    Configures the logging system.
+    :param verbose: Whether to enable verbosity.
+    :type verbose: bool
+    :param trace: Whether to enable tracing messages.
+    :type trace: bool
+    :param quiet: Whether to turn on "quiet mode".
+    :type quiet: bool
+    """
     level = logging.WARNING
     if (quiet):
         level = logging.ERROR
