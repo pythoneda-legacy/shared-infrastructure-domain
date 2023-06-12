@@ -3,7 +3,7 @@ pythonedainfrastructure/cli/logging_config_cli.py
 
 This file parses the logging config from the command-line interface for PythonEDA-Application base.
 
-Copyright (C) 2023-today rydnr's PythonEDA-Application/base
+Copyright (C) 2023-today rydnr's pythoneda-infrastructure/base
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

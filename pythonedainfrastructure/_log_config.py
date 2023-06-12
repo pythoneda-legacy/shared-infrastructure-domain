@@ -1,9 +1,9 @@
 """
 pythonedainfrastructure/_log_config.py
 
-This file configures the logging for PythonEDA-Application base.
+This file configures the logging for PythonEDA-Infrastructure layers.
 
-Copyright (C) 2023-today rydnr's PythonEDA-Application/base
+Copyright (C) 2023-today rydnr's pythoneda-infrastructure/base
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
