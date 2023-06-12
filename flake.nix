@@ -86,20 +86,12 @@
                 pythoneda-base.packages.${system}.pythoneda-base-latest-python310;
               python = pkgs.python310;
             };
-          pythoneda-infrastructure-base-0_0_1a6-python311 =
-            pythoneda-infrastructure-base-0_0_1a6-for {
-              pythoneda-base =
-                pythoneda-base.packages.${system}.pythoneda-base-latest-python311;
-              python = pkgs.python311;
-            };
           pythoneda-infrastructure-base-latest-python38 =
             pythoneda-infrastructure-base-0_0_1a6-python38;
           pythoneda-infrastructure-base-latest-python39 =
             pythoneda-infrastructure-base-0_0_1a6-python39;
           pythoneda-infrastructure-base-latest-python310 =
             pythoneda-infrastructure-base-0_0_1a6-python310;
-          pythoneda-infrastructure-base-latest-python311 =
-            pythoneda-infrastructure-base-0_0_1a6-python311;
           pythoneda-infrastructure-base-latest =
             pythoneda-infrastructure-base-latest-python310;
           default = pythoneda-infrastructure-base-latest;
@@ -123,21 +115,12 @@
               python = pkgs.python310;
               inherit pkgs nixpkgsRelease;
             };
-          pythoneda-infrastructure-base-0_0_1a6-python311 =
-            shared.devShell-for {
-              package =
-                packages.pythoneda-infrastructure-base-0_0_1a6-python311;
-              python = pkgs.python311;
-              inherit pkgs nixpkgsRelease;
-            };
           pythoneda-infrastructure-base-latest-python38 =
             pythoneda-infrastructure-base-0_0_1a6-python38;
           pythoneda-infrastructure-base-latest-python39 =
             pythoneda-infrastructure-base-0_0_1a6-python39;
           pythoneda-infrastructure-base-latest-python310 =
             pythoneda-infrastructure-base-0_0_1a6-python310;
-          pythoneda-infrastructure-base-latest-python311 =
-            pythoneda-infrastructure-base-0_0_1a6-python311;
           pythoneda-infrastructure-base-latest =
             pythoneda-infrastructure-base-latest-python310;
           default = pythoneda-infrastructure-base-latest;
