@@ -55,7 +55,6 @@
             preBuild = ''
               python -m venv .env
               source .env/bin/activate
-              echo pip install ${pythoneda-base}/dist/pythoneda_base-0.0.1a11-py3-none-any.whl
               pip install ${pythoneda-base}/dist/pythoneda_base-0.0.1a11-py3-none-any.whl
             '';
 
