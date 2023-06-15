@@ -3,7 +3,7 @@
     "Common classes for infrastructure layers of PythonEDA projects";
 
   inputs = rec {
-    nixos.url = "github:NixOS/nixpkgs/nixos-22.11";
+    nixos.url = "github:NixOS/nixpkgs/nixos-23.05";
     flake-utils.url = "github:numtide/flake-utils/v1.0.0";
     poetry2nix = {
       url = "github:nix-community/poetry2nix/v1.28.0";
@@ -51,7 +51,7 @@
             preBuild = ''
               python -m venv .env
               source .env/bin/activate
-              pip install ${pythoneda-base}/dist/pythoneda_base-0.0.1a11-py3-none-any.whl
+              pip install ${pythoneda-base}/dist/pythoneda_base-0.0.1a12-py3-none-any.whl
             '';
 
             postInstall = ''
