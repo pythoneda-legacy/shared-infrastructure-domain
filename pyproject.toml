@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pythoneda-infrastructure-base"
-version = "0.0.1a7"
+version = "0.0.1a8"
 description = "Infrastructure layer for PythonEDA"
 authors = ["rydnr <github@acm-sl.org>"]
 readme = "README.md"
