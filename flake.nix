@@ -5,13 +5,8 @@
   inputs = rec {
     nixos.url = "github:NixOS/nixpkgs/nixos-23.05";
     flake-utils.url = "github:numtide/flake-utils/v1.0.0";
-    poetry2nix = {
-      url = "github:nix-community/poetry2nix/v1.28.0";
-      inputs.nixpkgs.follows = "nixos";
-      inputs.flake-utils.follows = "flake-utils";
-    };
     pythoneda-base = {
-      url = "github:pythoneda/base/0.0.1a12";
+      url = "github:pythoneda/base/0.0.1a13";
       inputs.nixos.follows = "nixos";
       inputs.flake-utils.follows = "flake-utils";
       inputs.poetry2nix.follows = "poetry2nix";
