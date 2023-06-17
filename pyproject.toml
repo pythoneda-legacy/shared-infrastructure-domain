@@ -9,7 +9,7 @@ packages = [{include = "pythonedainfrastructure"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-pythoneda-base = "^0.0.1a12"
+pythoneda-base = "^0.0.1a14"
 requests = "^2.28.1"
 grpcio = "^1.41.0"
 
