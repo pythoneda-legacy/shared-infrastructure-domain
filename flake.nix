@@ -109,6 +109,8 @@
             shared.devShell-for {
               package =
                 packages.pythoneda-infrastructure-base-0_0_1a10-python38;
+              pythoneda-base =
+                pythoneda-base.packages.${system}.pythoneda-base-latest-python38;
               python = pkgs.python38;
               inherit pkgs nixpkgsRelease;
             };
@@ -116,6 +118,8 @@
             shared.devShell-for {
               package =
                 packages.pythoneda-infrastructure-base-0_0_1a10-python39;
+              pythoneda-base =
+                pythoneda-base.packages.${system}.pythoneda-base-latest-python39;
               python = pkgs.python39;
               inherit pkgs nixpkgsRelease;
             };
@@ -123,6 +127,8 @@
             shared.devShell-for {
               package =
                 packages.pythoneda-infrastructure-base-0_0_1a10-python310;
+              pythoneda-base =
+                pythoneda-base.packages.${system}.pythoneda-base-latest-python310;
               python = pkgs.python310;
               inherit pkgs nixpkgsRelease;
             };
