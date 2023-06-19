@@ -1,5 +1,5 @@
 """
-pythonedainfrastructure/network/grpc/grpc_server.py
+pythonedainfrastructure/pythonedanetwork/pythonedagrpc/pythoneda_grpc_server.py
 
 Base class for gRPC servers on PythonEDA applications.
 
@@ -18,8 +18,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from domain.event import Event
-from domain.primary_port import PrimaryPort
+from pythoneda.event import Event
+from pythoneda.primary_port import PrimaryPort
 
 from concurrent import futures
 import grpc
@@ -30,11 +30,11 @@ import json
 import logging
 from typing import Dict
 
-class GrpcServer(PrimaryPort):
+class PythonedaGrpcServer(PrimaryPort):
     """
     Base class for gRPC servers on PythonEDA applications.
 
-    Class name: GrpcServer
+    Class name: PythonedaGrpcServer
 
     Responsibilities:
         - Launch a gRPC server on a given port.
