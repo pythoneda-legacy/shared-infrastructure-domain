@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pythoneda-infrastructure-base"
-version = "0.0.1a10"
+version = "0.0.1a11"
 description = "Infrastructure layer for PythonEDA"
 authors = ["rydnr <github@acm-sl.org>"]
 readme = "README.md"
@@ -9,7 +9,7 @@ packages = [{include = "pythonedainfrastructure"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-pythoneda-base = "^0.0.1a14"
+pythoneda-base = "^0.0.1a15"
 requests = "^2.28.1"
 grpcio = "^1.41.0"
 

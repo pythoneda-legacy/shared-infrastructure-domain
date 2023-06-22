@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from pythoneda.event import Event
 from pythoneda.primary_port import PrimaryPort
 
+import abc
 from concurrent import futures
 import grpc
 
@@ -30,7 +31,7 @@ import json
 import logging
 from typing import Dict
 
-class PythonedaGrpcServer(PrimaryPort):
+class PythonedaGrpcServer(PrimaryPort, abc.ABC):
     """
     Base class for gRPC servers on PythonEDA applications.
 
@@ -46,9 +47,11 @@ class PythonedaGrpcServer(PrimaryPort):
 
     _default_insecure_port = '[::]:50051'
 
-    def __init__(port=None):
+    def __init__(self, port=None):
         """
         Initializes the instance.
+        :param port: The gRPC port.
+        :type port: int
         """
         super().__init__()
         if port:
@@ -82,6 +85,7 @@ class PythonedaGrpcServer(PrimaryPort):
         """
         return 999
 
+    @abc.abstractmethod
     def add_servicers(self, server, app):
         """
         Adds servicers to given server.
@@ -117,7 +121,7 @@ class PythonedaGrpcServer(PrimaryPort):
         :type app: pythonedaapplication.PythonEDAApplication
         """
         server = grpc.aio.server()
-        add_servicers(self, server, app)
+        self.add_servicers(server, app)
         server.add_insecure_port(self._insecure_port)
         logging.getLogger(__name__).info(f'gRPC server listening at {self.insecure_port}')
         await server.start()

@@ -37,6 +37,9 @@ class LoggingConfigCli(PrimaryPort):
         - PythonEDAApplication: Gets notified back with the interpreted logging settings.
     """
     def __init__(self):
+        """
+        Creates a new LoggingConfigCli instance.
+        """
         super().__init__()
 
     def priority(self) -> int:
