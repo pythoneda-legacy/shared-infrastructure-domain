@@ -22,9 +22,10 @@ from pythoneda.event import Event
 from pythoneda.event_emitter import EventEmitter
 
 import asyncio
-import dbus
 from dbus_next.aio import MessageBus
 from dbus_next import BusType, Message, MessageType
+
+from typing import Dict
 
 class DbusSignalEmitter(EventEmitter):
 
@@ -65,6 +66,7 @@ class DbusSignalEmitter(EventEmitter):
         :param event: The domain event to emit.
         :type event: Event from pythoneda.event
         """
+        await super().emit(event)
         emitters = signal_emitters().items()
 
         if emitters:

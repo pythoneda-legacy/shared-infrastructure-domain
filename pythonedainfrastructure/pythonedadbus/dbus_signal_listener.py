@@ -20,12 +20,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from pythoneda.primary_port import PrimaryPort
 
+import abc
 import asyncio
-import dbus
 from dbus_next.aio import MessageBus
 from dbus_next import BusType
 
-class DbusSignalListener(PrimaryPort):
+from typing import Dict
+
+class DbusSignalListener(PrimaryPort, abc.ABC):
 
     """
     A PrimaryPort that receives events as d-bus signals.
@@ -53,10 +55,29 @@ class DbusSignalListener(PrimaryPort):
         """
         return 100
 
-    def signal_receivers(self) -> Dict:
+    async def set_app(self, app):
+        """
+        Specifies the PythoneEDA instance.
+        :param app: The PythonEDA instance.
+        :type app: PythonEDA from pythonedaapplication.pythoneda
+        """
+        self._app = app
+
+    @property
+    def app(self):
+        """
+        Retrieves the PythoneEDA instance.
+        :return: The PythonEDA instance.
+        :rtype: PythonEDA from pythonedaapplication.pythoneda
+        """
+        return self._app
+
+    def signal_receivers(self, app) -> Dict:
         """
         Retrieves the configured signal receivers.
-        :return: A dictionary with the signal name as key, and the tuple bus-type, dbus-interface and function handler as value.
+        :param app: The PythonEDA instance.
+        :type app: PythonEDA from pythonedaapplication.pythoneda
+        :return: A dictionary with the signal name as key, and the tuple interface, bus-type and function handler as value.
         :rtype: Dict
         """
         return {}
@@ -65,17 +86,23 @@ class DbusSignalListener(PrimaryPort):
         """
         Receives the notification to connect to d-bus.
         :param app: The PythonEDAApplication instance.
-        :type app: pythonedaapplication.PythonEDAApplication
+        :type app: PythonEDA from pythonedaapplication.pythoneda
         """
-        receivers = signal_receivers().items()
+        await self.set_app(app)
+
+        print(f'Accepting app {app} in {self.__class__}')
+        receivers = self.signal_receivers(app).items()
 
         if receivers:
+            print(f'receivers -> {receivers}')
             for signal_name, value in receivers:
-                bus_type = value[0]
-                dbus_interface = value[1]
+                interface = value[0]
+                bus_type = value[1]
                 handler = value[2]
+
                 bus = await MessageBus(bus_type=bus_type).connect()
-                bus.add_signal_receiver(handler, dbus_interface=dbus_interface, signal_name)
+                bus.export(interface.path(), interface())
+                setattr(interface, f'on_{signal_name}', handler)
 
             while True:
                 await asyncio.sleep(1)
