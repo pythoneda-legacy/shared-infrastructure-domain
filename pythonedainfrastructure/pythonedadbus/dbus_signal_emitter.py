@@ -55,11 +55,8 @@ class DbusSignalEmitter(EventEmitter, abc.ABC):
         :return: A dictionary with the event class name as key, and a dictionary as value. Such dictionary must include the following entries:
           - "interface": the event interface,
           - "busType": the bus type,
-          - "destination": the event destination,
-          - "path": the path,
-          - "interfaceName": the interface,
-          - "signal": the signal name,
           - "transformer": a function capable of transforming the event information into a list of parameters.
+          - "signature": a function capable of returning the types of the event parameters.
         :rtype: Dict
         """
         return {}
@@ -80,22 +77,28 @@ class DbusSignalEmitter(EventEmitter, abc.ABC):
         :param event: The domain event to emit.
         :type event: pythoneda.event.Event
         """
+        logging.getLogger(self.__class__.__name__).info(f'In dbus_signal_emitter')
         await super().emit(event)
         collaborators = self.emitters()
 
         if collaborators:
             emitter = collaborators.get(self.fqdn_key(event.__class__), None)
             if emitter:
-                interfaceClass = emitter["interface"]
-                interface = interfaceClass()
+                interface_class = emitter["interface"]
+                instance = interface_class()
                 bus_type = emitter["busType"]
                 bus = await MessageBus(bus_type=bus_type).connect()
-                bus.export(interfaceClass.path(), interface)
+                bus.export(interface_class.path(), instance)
+                logging.getLogger(self.__class__.__name__).info(f'Sending signal {interface_class.__module__}.{interface_class.__name__} on path {interface_class.path()} to d-bus {bus_type}')
                 await bus.send(
                     Message.new_signal(
-                        emitter["path"],
-                        self.fqdn_key(interfaceClass),
-                        emitter["signal"],
+                        interface_class.path(),
+                        self.fqdn_key(interface_class),
+                        instance.name,
                         emitter["signature"](event),
                         emitter["transformer"](event)))
-                logging.getLogger(self.__class__.__name__).info(f'Sent signal {interfaceClass.__module__}.{interfaceClass.__name__} on path {emitter["path"]} to d-bus {bus_type}')
+                logging.getLogger(self.__class__.__name__).info(f'Sent signal {interface_class.__module__}.{interface_class.__name__} on path {interface_class.path()} to d-bus {bus_type}')
+            else:
+                logging.getLogger(self.__class__.__name__).warn(f'No d-bus emitter registered for event {event.__class__}')
+        else:
+            logging.getLogger(self.__class__.__name__).warn(f'No d-bus emitters found')

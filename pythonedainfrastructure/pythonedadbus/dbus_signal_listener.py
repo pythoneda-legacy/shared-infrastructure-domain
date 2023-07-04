@@ -94,10 +94,10 @@ class DbusSignalListener(PrimaryPort, abc.ABC):
 
         if receivers:
             for signal_name, value in receivers:
-                interfaceClass = value[0]
-                interface = interfaceClass()
-                bus_type = value[1]
+                interface_class, bus_type = value
+                interface = interface_class()
 
+                fqdn_interface_class = self.fqdn_key(interface_class)
                 bus = await MessageBus(bus_type=BusType.SYSTEM).connect()
 
                 bus.add_message_handler(self.process_message)
@@ -110,7 +110,7 @@ class DbusSignalListener(PrimaryPort, abc.ABC):
                         interface='org.freedesktop.DBus',
                         member='AddMatch',
                         signature='s',
-                        body=[f"type='signal',interface='pythonedaartifacteventinfrastructuregittagging.pythonedaartifacteventgittaggingdbus.dbus_tag_credentials_requested.DbusTagCredentialsRequested',path='/pythoneda/artifact/git_tagging',member='TagCredentialsRequested'"]
+                        body=[f"type='signal',interface='{fqdn_interface_class}',path='{interface_class.path()}',member='{interface.name}'"]
                     )
                 )
 
@@ -147,33 +147,3 @@ class DbusSignalListener(PrimaryPort, abc.ABC):
             result = False
 
         return result
-
-    async def new_accept(self, app):
-        """
-        Receives the notification to connect to d-bus.
-        :param app: The PythonEDAApplication instance.
-        :type app: PythonEDA from pythonedaapplication.pythoneda
-        """
-        await self.set_app(app)
-
-        bus = await MessageBus(bus_type=BusType.SYSTEM).connect()
-
-        def on_my_signal(message: Message):
-            print(f"Received signal with arguments: {message.body}")
-
-        # Add the signal handler
-        bus.add_message_handler(on_my_signal)
-
-        # Subscribe to the signal
-        await bus.call(
-            Message(
-                destination='org.freedesktop.DBus',
-                path='/org/freedesktop/DBus',
-                interface='org.freedesktop.DBus',
-                member='AddMatch',
-                signature='s',
-                body=[f"type='signal',interface='pythonedaartifacteventinfrastructuregittagging.pythonedaartifacteventgittaggingdbus.dbus_tag_credentials_requested.DbusTagCredentialsRequested',path='/pythoneda/artifact/git_tagging',member='TagCredentialsRequested'"]
-            )
-        )
-        while True:
-            await asyncio.sleep(1)
