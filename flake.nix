@@ -1,12 +1,10 @@
 {
-  description =
-    "Common classes for infrastructure layers of PythonEDA projects";
-
+  description = "Shared kernel for infrastructure layers of PythonEDA projects";
   inputs = rec {
     nixos.url = "github:NixOS/nixpkgs/nixos-23.05";
     flake-utils.url = "github:numtide/flake-utils/v1.0.0";
-    pythoneda-base = {
-      url = "github:pythoneda/base/0.0.1a15";
+    pythoneda-shared-pythoneda = {
+      url = "github:pythoneda-shared/pythoneda/0.0.1a23";
       inputs.nixos.follows = "nixos";
       inputs.flake-utils.follows = "flake-utils";
     };
@@ -16,16 +14,18 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixos { inherit system; };
+        pname = "pythoneda-shared-infrastructure";
         description =
-          "Common classes for infrastructure layers of PythonEDA projects";
+          "Shared kernel for infrastructure layers of PythonEDA projects";
         license = pkgs.lib.licenses.gpl3;
-        homepage = "https://github.com/pythoneda-infrastructure/base";
+        homepage = "https://github.com/pythoneda-shared/infrastructure";
         maintainers = with pkgs.lib.maintainers; [ ];
         nixpkgsRelease = "nixos-23.05";
-        shared = import ./nix/devShells.nix;
-        pythoneda-infrastructure-base-for = { version, pythoneda-base, python }:
+        shared = import ./nix/shared.nix;
+        pythonpackage = "pythonedainfrastructure";
+        pythoneda-shared-infrastructure-for =
+          { python, pythoneda-shared-pythoneda, version }:
           let
-            pname = "pythoneda-infrastructure-base";
             pythonVersionParts = builtins.splitVersion python.version;
             pythonMajorVersion = builtins.head pythonVersionParts;
             pythonMajorMinorVersion =
@@ -43,19 +43,20 @@
             nativeBuildInputs = with python.pkgs; [ pip pkgs.jq poetry-core ];
             propagatedBuildInputs = with python.pkgs; [
               dbus-next
-              pythoneda-base
+              pythoneda-shared-pythoneda
               grpcio
               requests
             ];
 
             checkInputs = with python.pkgs; [ pytest ];
 
-            pythonImportsCheck = [ "pythonedainfrastructure" ];
+            pythonImportsCheck = [ pythonpackage ];
 
             preBuild = ''
               python -m venv .env
               source .env/bin/activate
-              pip install ${pythoneda-base}/dist/pythoneda_base-${pythoneda-base.version}-py${pythonMajorVersion}-none-any.whl
+              echo "pythoneda-shared-pythoneda: ${pythoneda-shared-pythoneda}"
+              pip install ${pythoneda-shared-pythoneda}/dist/pythoneda_shared_pythoneda-${pythoneda-shared-pythoneda.version}-py${pythonMajorVersion}-none-any.whl
               rm -rf .env
             '';
 
@@ -69,80 +70,99 @@
               inherit description homepage license maintainers;
             };
           };
-        pythoneda-infrastructure-base-0_0_1a12-for = { pythoneda-base, python }:
-          pythoneda-infrastructure-base-for {
-            version = "0.0.1a12";
-            inherit pythoneda-base python;
+        pythoneda-shared-infrastructure-0_0_1a13-for =
+          { python, pythoneda-shared-pythoneda }:
+          pythoneda-shared-infrastructure-for {
+            version = "0.0.1a13";
+            inherit python pythoneda-shared-pythoneda;
           };
       in rec {
-        packages = rec {
-          pythoneda-infrastructure-base-0_0_1a12-python38 =
-            pythoneda-infrastructure-base-0_0_1a12-for {
-              pythoneda-base =
-                pythoneda-base.packages.${system}.pythoneda-base-latest-python38;
-              python = pkgs.python38;
-            };
-          pythoneda-infrastructure-base-0_0_1a12-python39 =
-            pythoneda-infrastructure-base-0_0_1a12-for {
-              pythoneda-base =
-                pythoneda-base.packages.${system}.pythoneda-base-latest-python39;
-              python = pkgs.python39;
-            };
-          pythoneda-infrastructure-base-0_0_1a12-python310 =
-            pythoneda-infrastructure-base-0_0_1a12-for {
-              pythoneda-base =
-                pythoneda-base.packages.${system}.pythoneda-base-latest-python310;
-              python = pkgs.python310;
-            };
-          pythoneda-infrastructure-base-latest-python38 =
-            pythoneda-infrastructure-base-0_0_1a12-python38;
-          pythoneda-infrastructure-base-latest-python39 =
-            pythoneda-infrastructure-base-0_0_1a12-python39;
-          pythoneda-infrastructure-base-latest-python310 =
-            pythoneda-infrastructure-base-0_0_1a12-python310;
-          pythoneda-infrastructure-base-latest =
-            pythoneda-infrastructure-base-latest-python310;
-          default = pythoneda-infrastructure-base-latest;
-        };
         defaultPackage = packages.default;
         devShells = rec {
-          pythoneda-infrastructure-base-0_0_1a12-python38 =
+          default = pythoneda-shared-infrastructure-latest;
+          pythoneda-shared-infrastructure-0_0_1a13-python38 =
             shared.devShell-for {
               package =
-                packages.pythoneda-infrastructure-base-0_0_1a12-python38;
-              pythoneda-base =
-                pythoneda-base.packages.${system}.pythoneda-base-latest-python38;
+                packages.pythoneda-shared-infrastructure-0_0_1a13-python38;
+              pythoneda-shared-pythoneda =
+                pythoneda-shared-pythoneda.packages.${system}.pythoneda-shared-pythoneda-latest-python38;
               python = pkgs.python38;
               inherit pkgs nixpkgsRelease;
             };
-          pythoneda-infrastructure-base-0_0_1a12-python39 =
+          pythoneda-shared-infrastructure-0_0_1a13-python39 =
             shared.devShell-for {
               package =
-                packages.pythoneda-infrastructure-base-0_0_1a12-python39;
-              pythoneda-base =
-                pythoneda-base.packages.${system}.pythoneda-base-latest-python39;
+                packages.pythoneda-shared-infrastructure-0_0_1a13-python39;
+              pythoneda-shared-pythoneda =
+                pythoneda-shared-pythoneda.packages.${system}.pythoneda-shared-pythoneda-latest-python39;
               python = pkgs.python39;
               inherit pkgs nixpkgsRelease;
             };
-          pythoneda-infrastructure-base-0_0_1a12-python310 =
+          pythoneda-shared-infrastructure-0_0_1a13-python310 =
             shared.devShell-for {
               package =
-                packages.pythoneda-infrastructure-base-0_0_1a12-python310;
-              pythoneda-base =
-                pythoneda-base.packages.${system}.pythoneda-base-latest-python310;
+                packages.pythoneda-shared-infrastructure-0_0_1a13-python310;
+              pythoneda-shared-pythoneda =
+                pythoneda-shared-pythoneda.packages.${system}.pythoneda-shared-pythoneda-latest-python310;
               python = pkgs.python310;
               inherit pkgs nixpkgsRelease;
             };
-          pythoneda-infrastructure-base-latest-python38 =
-            pythoneda-infrastructure-base-0_0_1a12-python38;
-          pythoneda-infrastructure-base-latest-python39 =
-            pythoneda-infrastructure-base-0_0_1a12-python39;
-          pythoneda-infrastructure-base-latest-python310 =
-            pythoneda-infrastructure-base-0_0_1a12-python310;
-          pythoneda-infrastructure-base-latest =
-            pythoneda-infrastructure-base-latest-python310;
-          default = pythoneda-infrastructure-base-latest;
-
+          pythoneda-shared-infrastructure-0_0_1a13-python311 =
+            shared.devShell-for {
+              package =
+                packages.pythoneda-shared-infrastructure-0_0_1a13-python311;
+              pythoneda-shared-pythoneda =
+                pythoneda-shared-pythoneda.packages.${system}.pythoneda-shared-pythoneda-latest-python311;
+              python = pkgs.python311;
+              inherit pkgs nixpkgsRelease;
+            };
+          pythoneda-shared-infrastructure-latest =
+            pythoneda-shared-infrastructure-latest-python311;
+          pythoneda-shared-infrastructure-latest-python38 =
+            pythoneda-shared-infrastructure-0_0_1a13-python38;
+          pythoneda-shared-infrastructure-latest-python39 =
+            pythoneda-shared-infrastructure-0_0_1a13-python39;
+          pythoneda-shared-infrastructure-latest-python310 =
+            pythoneda-shared-infrastructure-0_0_1a13-python310;
+          pythoneda-shared-infrastructure-latest-python311 =
+            pythoneda-shared-infrastructure-0_0_1a13-python311;
+        };
+        packages = rec {
+          default = pythoneda-shared-infrastructure-latest;
+          pythoneda-shared-infrastructure-0_0_1a13-python38 =
+            pythoneda-shared-infrastructure-0_0_1a13-for {
+              python = pkgs.python38;
+              pythoneda-shared-pythoneda =
+                pythoneda-shared-pythoneda.packages.${system}.pythoneda-shared-pythoneda-latest-python38;
+            };
+          pythoneda-shared-infrastructure-0_0_1a13-python39 =
+            pythoneda-shared-infrastructure-0_0_1a13-for {
+              python = pkgs.python39;
+              pythoneda-shared-pythoneda =
+                pythoneda-shared-pythoneda.packages.${system}.pythoneda-shared-pythoneda-latest-python39;
+            };
+          pythoneda-shared-infrastructure-0_0_1a13-python310 =
+            pythoneda-shared-infrastructure-0_0_1a13-for {
+              python = pkgs.python310;
+              pythoneda-shared-pythoneda =
+                pythoneda-shared-pythoneda.packages.${system}.pythoneda-shared-pythoneda-latest-python310;
+            };
+          pythoneda-shared-infrastructure-0_0_1a13-python311 =
+            pythoneda-shared-infrastructure-0_0_1a13-for {
+              python = pkgs.python311;
+              pythoneda-shared-pythoneda =
+                pythoneda-shared-pythoneda.packages.${system}.pythoneda-shared-pythoneda-latest-python311;
+            };
+          pythoneda-shared-infrastructure-latest =
+            pythoneda-shared-infrastructure-latest-python311;
+          pythoneda-shared-infrastructure-latest-python38 =
+            pythoneda-shared-infrastructure-0_0_1a13-python38;
+          pythoneda-shared-infrastructure-latest-python39 =
+            pythoneda-shared-infrastructure-0_0_1a13-python39;
+          pythoneda-shared-infrastructure-latest-python310 =
+            pythoneda-shared-infrastructure-0_0_1a13-python310;
+          pythoneda-shared-infrastructure-latest-python311 =
+            pythoneda-shared-infrastructure-0_0_1a13-python311;
         };
       });
 }
